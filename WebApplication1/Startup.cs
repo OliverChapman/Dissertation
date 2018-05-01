@@ -71,23 +71,20 @@ namespace WebApplication1
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            CreateRoles(serviceProvider);
+            //CreateRoles(serviceProvider);
         }
 
         private void CreateRoles(IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            string[] roleNames = { "Demonstrator", "Student" };
-            Task<IdentityResult> roleResult;
-            foreach (var item in roleNames)
+            string[] roleNames = { "Demonstrator", "Student", "Lecturer" };
+            foreach (var item in roleNames) 
             {
-                Task<bool> roleExists = roleManager.RoleExistsAsync(item);
+                var roleExists = roleManager.RoleExistsAsync(item);
                 roleExists.Wait();
-                if (!roleExists.Result)
-                {
-                    roleResult = roleManager.CreateAsync(new IdentityRole(item));
-                    roleResult.Wait();
-                }
+                if (roleExists.Result) continue;
+                var roleResult = roleManager.CreateAsync(new IdentityRole(item));
+                roleResult.Wait();
             }
         }
     }

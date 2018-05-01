@@ -27,15 +27,18 @@ namespace WebApplication1.Controllers
             {
                 return View();
             }
-            if (await _userManager.IsInRoleAsync(user, "Demonstrator"))
+            switch (user.UserType)
             {
-                _logger.LogInformation("User is Demonstrator.");
-                return RedirectToAction(nameof(DemonstratorController.Index), "Demonstrator");
-            }
-            if (await _userManager.IsInRoleAsync(user, "Student"))
-            {
-                _logger.LogInformation("User is Student.");
-                return RedirectToAction(nameof(StudentController.Index), "Student");
+                case UserType.Demonstrator:
+                    _logger.LogInformation("User is Demonstrator.");
+                    return RedirectToAction(nameof(DemonstratorController.Index), "Demonstrator");
+                case UserType.Student:
+                    _logger.LogInformation("User is Student.");
+                    return RedirectToAction(nameof(StudentController.Index), "Student");
+                case UserType.Lecturer:
+                    _logger.LogInformation("User is Lecturer");
+                    //return RedirectToAction(nameof(LecturerController.Index), "Lecturer");
+                    return null;
             }
 
             throw new Exception("User has no Role");

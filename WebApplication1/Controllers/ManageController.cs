@@ -32,7 +32,7 @@ namespace WebApplication1.Controllers
           UserManager<ApplicationUser> userManager,
           SignInManager<ApplicationUser> signInManager,
           IEmailSender emailSender,
-          ILogger<ManageController> logger,
+          ILogger<AccountController> logger,
           UrlEncoder urlEncoder)
         {
             _userManager = userManager;

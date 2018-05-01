@@ -7,17 +7,19 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 using WebApplication1.Data;
+using WebApplication1.Models;
 
-namespace WebApplication1.Data.Migrations
+namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180430211820_HelpRequestsAndLabSesh")]
+    partial class HelpRequestsAndLabSesh
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
+                .HasAnnotation("ProductVersion", "2.0.2-rtm-10011")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -146,6 +148,10 @@ namespace WebApplication1.Data.Migrations
                     b.Property<string>("Forename")
                         .IsRequired();
 
+                    b.Property<int?>("LabId");
+
+                    b.Property<string>("Location");
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
@@ -174,7 +180,11 @@ namespace WebApplication1.Data.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
+                    b.Property<int>("UserType");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("LabId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -185,6 +195,54 @@ namespace WebApplication1.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.HelpRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("HelpDesc");
+
+                    b.Property<int>("Status");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HelpRequest");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.LabSession", b =>
+                {
+                    b.Property<int>("LabId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ModuleName");
+
+                    b.Property<string>("ModuleNo");
+
+                    b.Property<string>("RoomName");
+
+                    b.HasKey("LabId");
+
+                    b.ToTable("LabSession");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.UserToRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("HelpRequestId");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HelpRequestId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserToRequest");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -230,6 +288,24 @@ namespace WebApplication1.Data.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("WebApplication1.Models.LabSession", "Lab")
+                        .WithMany("Users")
+                        .HasForeignKey("LabId");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.UserToRequest", b =>
+                {
+                    b.HasOne("WebApplication1.Models.HelpRequest", "HelpRequest")
+                        .WithMany("StudentAndDemoUsers")
+                        .HasForeignKey("HelpRequestId");
+
+                    b.HasOne("WebApplication1.Models.ApplicationUser", "User")
+                        .WithMany("HelpRequests")
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

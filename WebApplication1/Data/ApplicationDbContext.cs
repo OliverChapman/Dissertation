@@ -15,6 +15,8 @@ namespace WebApplication1.Data
         {
         }
 
+        
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -22,5 +24,9 @@ namespace WebApplication1.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+        public DbSet<HelpRequest> HelpRequest { get; set; }
+        public DbSet<LabSession> LabSession { get; set; }
+        public DbSet<UserToRequest> UserToRequest { get; set; }
     }
 }

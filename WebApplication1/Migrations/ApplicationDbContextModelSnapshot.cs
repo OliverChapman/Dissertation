@@ -7,18 +7,18 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 using WebApplication1.Data;
+using WebApplication1.Models;
 
-namespace WebApplication1.Data.Migrations
+namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180205212437_changed model email")]
-    partial class changedmodelemail
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
+                .HasAnnotation("ProductVersion", "2.0.2-rtm-10011")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -144,6 +144,13 @@ namespace WebApplication1.Data.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<string>("Forename")
+                        .IsRequired();
+
+                    b.Property<int?>("LabId");
+
+                    b.Property<string>("Location");
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
@@ -162,12 +169,21 @@ namespace WebApplication1.Data.Migrations
 
                     b.Property<string>("SecurityStamp");
 
+                    b.Property<int>("StudentNumber");
+
+                    b.Property<string>("Surname")
+                        .IsRequired();
+
                     b.Property<bool>("TwoFactorEnabled");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
+                    b.Property<int>("UserType");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("LabId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -178,6 +194,56 @@ namespace WebApplication1.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.HelpRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<string>("HelpDesc");
+
+                    b.Property<int>("Status");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HelpRequest");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.LabSession", b =>
+                {
+                    b.Property<int>("LabId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ModuleName");
+
+                    b.Property<string>("ModuleNo");
+
+                    b.Property<string>("RoomName");
+
+                    b.HasKey("LabId");
+
+                    b.ToTable("LabSession");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.UserToRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("HelpRequestId");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HelpRequestId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserToRequest");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -223,6 +289,24 @@ namespace WebApplication1.Data.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("WebApplication1.Models.LabSession", "Lab")
+                        .WithMany("Users")
+                        .HasForeignKey("LabId");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.UserToRequest", b =>
+                {
+                    b.HasOne("WebApplication1.Models.HelpRequest", "HelpRequest")
+                        .WithMany("StudentAndDemoUsers")
+                        .HasForeignKey("HelpRequestId");
+
+                    b.HasOne("WebApplication1.Models.ApplicationUser", "User")
+                        .WithMany("HelpRequests")
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }
