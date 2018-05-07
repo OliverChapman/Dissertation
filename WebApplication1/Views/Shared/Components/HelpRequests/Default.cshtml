@@ -1,0 +1,42 @@
+﻿@model System.Linq.IQueryable<WebApplication1.Models.DemonstratorViewModels.HelpRequestListViewModel>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            Student Number
+        </th>
+        <th>
+            Location
+        </th>
+        <th>
+            Time Requested
+        </th>
+        <th>
+            Problem
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Location)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeRequested)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DescOfProblem)
+            </td>
+            <td>
+                <a asp-controller="Demonstrator"asp-action="AcceptRequest" asp-route-id="@item.Id">Accept</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

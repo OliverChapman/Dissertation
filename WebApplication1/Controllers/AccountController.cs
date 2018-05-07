@@ -66,12 +66,10 @@ namespace WebApplication1.Controllers
                 _logger.LogInformation("User logged in.");
                 var user = _userManager.FindByNameAsync(model.StudentNumber.ToString()).Result;
                 var userAgent = Request.Headers["User-Agent"].ToString();
-                if (await _userManager.IsInRoleAsync(user, "Demonstrator") && userAgent.Contains("Windows"))
-                {
-                    if (userAgent.Contains("Windows"))
-                        user.UserType = UserType.Student;
-                    user.UserType = UserType.Demonstrator;
-                }
+                user.Location = GetLocation();
+                if (await _userManager.IsInRoleAsync(user, "Demonstrator"))
+                    user.UserType = userAgent.Contains("Windows") ? UserType.Demonstrator : UserType.Demonstrator;
+                await _userManager.UpdateAsync(user);
                 return RedirectToLocal(returnUrl);
             }
             else
@@ -82,6 +80,11 @@ namespace WebApplication1.Controllers
 
         }
 
+        private string GetLocation()
+        {
+            var result = Request.HttpContext.Connection.RemoteIpAddress.ToString();
+            return result;
+        }
 
         [HttpGet]
         [AllowAnonymous]
@@ -98,14 +101,14 @@ namespace WebApplication1.Controllers
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (!ModelState.IsValid) return View(model);
-            var user = new ApplicationUser { UserName = model.StudentNumber.ToString(), Email = model.Email, Forename = model.Forename, Surname= model.Surname, StudentNumber = model.StudentNumber, UserType = UserType.Student};
+            var user = new ApplicationUser { UserName = model.StudentNumber.ToString(), Email = model.Email, Forename = model.Forename, Surname= model.Surname, StudentNumber = model.StudentNumber, UserType = UserType.Lecturer, Location = GetLocation()};
 
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
             {
                 _logger.LogInformation("User created a new account with password.");
-                await _userManager.AddToRoleAsync(user, "Student");
+                await _userManager.AddToRoleAsync(user, "Lecturer");
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
                 await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);

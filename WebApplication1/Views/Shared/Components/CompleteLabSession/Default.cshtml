@@ -1,0 +1,44 @@
+﻿@model IEnumerable<LabSession>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Module Name
+            </th>
+            <th>
+                Module Number
+            </th>
+            <th>
+                Room
+            </th>
+            <th>
+                Date Created
+            </th>
+            <th>
+                
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ModuleName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ModuleNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoomName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateCreated)
+                </td>
+                <td>
+                    <a asp-controller="Lecturer" asp-action="CompleteLab" asp-route-id="@item.LabId">Finish Lab</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

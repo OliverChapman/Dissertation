@@ -25,7 +25,7 @@ namespace WebApplication1.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return View();
+                return RedirectToAction("LogIn", "Account");
             }
             switch (user.UserType)
             {
@@ -37,7 +37,7 @@ namespace WebApplication1.Controllers
                     return RedirectToAction(nameof(StudentController.Index), "Student");
                 case UserType.Lecturer:
                     _logger.LogInformation("User is Lecturer");
-                    //return RedirectToAction(nameof(LecturerController.Index), "Lecturer");
+                    return RedirectToAction(nameof(LecturerController.Index), "Lecturer");
                     return null;
             }
 

@@ -1,0 +1,42 @@
+﻿@model IEnumerable<WebApplication1.Models.DemonstratorViewModels.HelpRequestListViewModel>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.StudentNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Location)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TimeRequested)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DescOfProblem)
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.StudentNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Location)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TimeRequested)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DescOfProblem)
+        </td>
+        <td>
+            <a asp-action="AcceptRequest" asp-route-id="@item.Id">Accept</a> |
+        </td>
+    </tr>
+}
+    </tbody>
+</table>

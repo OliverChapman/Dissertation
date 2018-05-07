@@ -217,11 +217,15 @@ namespace WebApplication1.Migrations
                     b.Property<int>("LabId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("DateCreated");
+
                     b.Property<string>("ModuleName");
 
                     b.Property<string>("ModuleNo");
 
                     b.Property<string>("RoomName");
+
+                    b.Property<bool>("SessionComplete");
 
                     b.HasKey("LabId");
 

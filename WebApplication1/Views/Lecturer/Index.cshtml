@@ -1,8 +1,31 @@
-﻿@model object
-
+﻿@model LabSession
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Lecturer Page";
     Layout = "_Layout";
 }
 
-<h2>title</h2>
+<h2>Lecturer Page</h2>
+@if (Model == null)
+{
+    <div class="col-lg-4">
+        @await Component.InvokeAsync("AddLabSession")
+    </div>
+}
+else
+{
+    <div class="col-lg-4">
+        @*@await Component.InvokeAsync("CompleteLabSession")*@
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Module Name: </h3><h4>@Model.ModuleName </h4><br /> 
+                <h3>Module Number: </h3><h4>@Model.ModuleNo</h4><br/> 
+                <h3>Room Name: </h3><h4>@Model.RoomName </h4><br /> 
+                <h3>Date Created: </h3><h4>@Model.DateCreated</h4><br/>
+             <a asp-controller="Lecturer" asp-action="CompleteLab" asp-route-id="@Model.LabId">Finish Lab</a>
+            </div>
+        </div>
+    </div>   
+    <div class="col-lg-4">
+        
+    </div>
+}

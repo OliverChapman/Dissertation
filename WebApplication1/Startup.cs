@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebApplication1.Data;
@@ -39,11 +40,12 @@ namespace WebApplication1
             });
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
-
             services.AddMvc();
+            services.AddSignalR();
 
 
-            
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,8 +72,11 @@ namespace WebApplication1
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            //CreateRoles(serviceProvider);
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<NotificationsHub>("/notifications");
+            });
+            CreateRoles(serviceProvider);
         }
 
         private void CreateRoles(IServiceProvider serviceProvider)
