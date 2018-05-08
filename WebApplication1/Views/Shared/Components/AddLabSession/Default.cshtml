@@ -1,6 +1,6 @@
 ﻿@model WebApplication1.Models.LecturerViewModels.AddLabRequestViewModel
 
-        <form asp-controller="Lecturer" asp-action="CreateLabSession" data-ajax="true" data-ajax-method="POST">
+        <form asp-controller="Lecturer" asp-action="CreateLabSession" method="post">
             <h4>Create Lab Session</h4>
             <hr />
             @*<div asp-validation-summary="All" class="text-danger"></div>*@
@@ -12,7 +12,9 @@
                 <input asp-for="ModuleNo" class="form-control" />
                 <span asp-validation-for="ModuleNo" class="text-danger"></span>
                 <label asp-for="RoomName"></label>
-                <input asp-for="RoomName" class="form-control" />
+                <select asp-for="RoomName" asp-items="@Model.RoomNames" class="form-control">
+                    <option>Please select one</option>
+                </select>
                 <span asp-validation-for="RoomName" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-default">Create Lab Session</button>

@@ -1,0 +1,39 @@
+﻿@model IList<WebApplication1.Models.LecturerViewModels.StudentUserListViewModel>
+
+<table class="table table-responsive" style="height: auto" id="createTable">
+    <thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model[0].StudentNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model[0].FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model[0].Surname)
+        </th>
+        <th>
+                
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Surname)
+            </td>
+            <td>
+                <a asp-controller="Lecturer" asp-action="MakeStudentDemonstrator" asp-route-id="@item.Id">Make Demonstrator</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

@@ -13,19 +13,52 @@
 }
 else
 {
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         @*@await Component.InvokeAsync("CompleteLabSession")*@
         <div class="row">
             <div class="col-sm-12">
-                <h3>Module Name: </h3><h4>@Model.ModuleName </h4><br /> 
-                <h3>Module Number: </h3><h4>@Model.ModuleNo</h4><br/> 
-                <h3>Room Name: </h3><h4>@Model.RoomName </h4><br /> 
+                <h3>Module Name: </h3><h4>@Model.ModuleName </h4><br/>
+                <h3>Module Number: </h3><h4>@Model.ModuleNo</h4><br/>
+                <h3>Room Name: </h3><h4>@Model.RoomName </h4><br/>
                 <h3>Date Created: </h3><h4>@Model.DateCreated</h4><br/>
-             <a asp-controller="Lecturer" asp-action="CompleteLab" asp-route-id="@Model.LabId">Finish Lab</a>
+                <a asp-controller="Lecturer" asp-action="CompleteLab" asp-route-id="@Model.LabId">Finish Lab</a>
             </div>
         </div>
     </div>   
-    <div class="col-lg-4">
-        
+    <div class="col-lg-9">
+        <div class="col-lg-6">
+            <h2>Student List</h2>
+            <input type="text" id="createSearchInput" onkeyup="createSearch()" placeholder="Search Student Number.." style="width:inherit">
+            @await Component.InvokeAsync("CreateDemonstrator")
+        </div>       
+        <div class="col-lg-6">
+            <h2>Demonstrator List</h2>
+            @await Component.InvokeAsync("RemoveDemonstrator")
+        </div>
     </div>
+    @section scripts{
+        <script>
+            function createSearch() {
+                // Declare variables
+                //w3 schools tutorial https://www.w3schools.com/howto/howto_js_filter_table.asp
+                var td, i;
+                var input = document.getElementById("createSearchInput");
+                var filter = input.value.toUpperCase();
+                var table = document.getElementById("createTable");
+                var tr = table.getElementsByTagName("tr");
+
+                // Loop through all table rows, and hide those who don't match the search query
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[0];
+                    if (td) {
+                        if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+        </script>
+    }
 }

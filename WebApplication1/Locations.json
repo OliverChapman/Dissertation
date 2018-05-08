@@ -1,0 +1,31 @@
+﻿{
+  "Locations":[
+    {
+      "LocationName": "localhost",
+      "Seats": [
+        {
+          "Ip": "::1",
+          "SeatNo": "Home"
+        }
+      ]
+    },
+    {
+      "LocationName": "Home",
+      "Seats": [
+        {
+          "Ip": "192.168.1.59",
+          "SeatNo": "Main Laptop"
+
+        },
+        {
+          "Ip": "192.168.1.45",
+          "SeatNo": "Old Laptop"
+        },
+        {
+          "Ip": "192.168.1.42",
+          "SeatNo": "Mobile" 
+        }
+      ] 
+    }
+  ]
+}

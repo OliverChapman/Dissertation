@@ -1,0 +1,34 @@
+﻿@model List<WebApplication1.Models.StudentViewModels.HelpRequestListItemViewModel>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Problem
+            </th>
+            <th>
+                Date Requested
+            </th>
+            <th>
+                Status
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Problem)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateRequested)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
