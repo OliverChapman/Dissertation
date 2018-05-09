@@ -21,7 +21,8 @@ namespace WebApplication1.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IHubContext<NotificationsHub> _hubContext;
 
-        public DemonstratorController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, IHubContext<NotificationsHub> hubContext)
+        public DemonstratorController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, 
+            IHubContext<NotificationsHub> hubContext)
         {
             _userManager = userManager;
             _context = context;
@@ -46,7 +47,7 @@ namespace WebApplication1.Controllers
             return View(helpRequestViewModel);
         }
 
-        public IActionResult AcceptRequest(int id)
+        public async Task<IActionResult> AcceptRequest(int id)
         {
             var helpRequest = _context.HelpRequest.FirstOrDefault(x => x.Id == id && x.Status == Status.Requested);
             if (helpRequest == null) return RedirectToAction("Index");
@@ -55,20 +56,18 @@ namespace WebApplication1.Controllers
             _context.UserToRequest.Add(helpToUser);
             helpRequest.Status = Status.InProgress;
             _context.HelpRequest.Update(helpRequest);
-            _context.SaveChanges();
-            _hubContext.Clients.All.SendAsync("ReloadHelpList");
+            await _context.SaveChangesAsync();
+            await _hubContext.Clients.All.SendAsync("ReloadHelpList");
             return RedirectToAction("Index");
         }
 
         public IActionResult CompleteRequest(int id)
         {
             var helpRequest = _context.HelpRequest.FirstOrDefault(x => x.Id == id && x.Status == Status.InProgress);
-            if (helpRequest != null)
-            {
-                helpRequest.Status = Status.Completed;
-                _context.HelpRequest.Update(helpRequest);
-                _context.SaveChanges();
-            }
+            if (helpRequest == null) return RedirectToAction("Index");
+            helpRequest.Status = Status.Completed;
+            _context.HelpRequest.Update(helpRequest);
+            _context.SaveChanges();
             return RedirectToAction("Index");
         }
 
